@@ -1,0 +1,66 @@
+# AIQueue Backend Dependencies
+# Core FastAPI framework and server
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# Ollama client for local AI models
+ollama==0.3.3
+
+# Data validation and serialization
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# HTTP client for external API calls
+aiohttp==3.9.1
+httpx==0.25.2
+
+# File upload support
+python-multipart==0.0.6
+
+# Environment variables management
+python-dotenv==1.0.0
+
+# Database support (SQLite + async)
+sqlalchemy==2.0.23
+aiosqlite==0.19.0
+
+# Background task processing
+celery==5.3.4
+redis==5.0.1
+
+# Logging and monitoring
+loguru==0.7.2
+
+# Development and testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+black==23.11.0
+isort==5.12.0
+
+# Security and authentication
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# CORS and middleware
+python-cors==1.7.0
+
+# JSON handling and utilities
+orjson==3.9.10
+python-slugify==8.0.1
+
+# Date and time utilities
+python-dateutil==2.8.2
+
+# File processing
+python-magic==0.4.27
+
+# Optional: For future integrations
+# openai==1.3.7              # For OpenAI API
+# anthropic==0.5.0           # For Claude API
+# together==0.2.7            # For Together API
+# supabase==2.0.2            # For cloud database
+# discord.py==2.3.2          # For Discord bot
+# tweepy==4.14.0             # For Twitter integration
+
+# Development server with auto-reload
+watchfiles==0.21.0

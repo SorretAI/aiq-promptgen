@@ -1,0 +1,21 @@
+{
+  "prompts": [
+    {
+      "id": "38c371a1",
+      "original_prompt": "Create a compelling email subject line for our AI automation course",
+      "optimized_prompt": "Sure, here is the variant prompt you requested:\n\n**Variant prompt:**\n\nCreate a compelling email subject line that would entice potential attendees to sign up for our AI automation course.",
+      "task_type": "email",
+      "optimization_level": "low_regenerate",
+      "timestamp": "2025-07-19T11:45:07.799260",
+      "usage_count": 0,
+      "rating": null
+    }
+  ],
+  "categories": {
+    "email": [
+      "38c371a1"
+    ]
+  },
+  "usage_stats": {},
+  "last_updated": "2025-07-19T11:45:07.799426"
+}

@@ -16,6 +16,7 @@ from datetime import datetime
 from dataclasses import dataclass, asdict
 import os
 import logging
+from contextlib import asynccontextmanager
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -442,14 +443,42 @@ class AIQueueCore:
         return enhanced_prompt
 
 # ============================================================================
+# LIFESPAN CONTEXT MANAGER (MODERN APPROACH)
+# ============================================================================
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Modern lifespan event handler replacing deprecated startup/shutdown events"""
+    # Startup
+    logger.info("🚀 AIQueue Local Engine starting up...")
+    
+    # Initialize core engine
+    global core
+    core = AIQueueCore()
+    logger.info(f"Available models: {list(core.local_models.keys())}")
+    
+    # Test Ollama connection
+    try:
+        models = core.ollama_client.list()
+        logger.info(f"✅ Ollama connected with {len(models['models'])} models")
+    except Exception as e:
+        logger.error(f"❌ Ollama connection failed: {e}")
+    
+    yield  # Application is running
+    
+    # Shutdown
+    logger.info("🛑 AIQueue Local Engine shutting down...")
+
+# ============================================================================
 # FASTAPI APPLICATION
 # ============================================================================
 
-# Initialize FastAPI app
+# Initialize FastAPI app with lifespan
 app = FastAPI(
     title="AIQueue Local Engine",
     description="Local Ollama-powered AI engine for the AIQueue system",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # Configure CORS for frontend access
@@ -461,8 +490,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize core engine
-core = AIQueueCore()
+# Global core instance (initialized in lifespan)
+core = None
 
 # ============================================================================
 # API ENDPOINTS
@@ -474,7 +503,7 @@ async def root():
     return {
         "message": "AIQueue Local Engine is running",
         "version": "1.0.0",
-        "available_models": list(core.local_models.keys()),
+        "available_models": list(core.local_models.keys()) if core else [],
         "status": "ready"
     }
 
@@ -572,28 +601,6 @@ async def get_system_stats():
             "error": str(e),
             "system_status": "error"
         }
-
-# ============================================================================
-# STARTUP EVENTS
-# ============================================================================
-
-@app.on_event("startup")
-async def startup_event():
-    """Initialize system on startup"""
-    logger.info("🚀 AIQueue Local Engine starting up...")
-    logger.info(f"Available models: {list(core.local_models.keys())}")
-    
-    # Test Ollama connection
-    try:
-        models = core.ollama_client.list()
-        logger.info(f"✅ Ollama connected with {len(models['models'])} models")
-    except Exception as e:
-        logger.error(f"❌ Ollama connection failed: {e}")
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Cleanup on shutdown"""
-    logger.info("🛑 AIQueue Local Engine shutting down...")
 
 # ============================================================================
 # DEVELOPMENT SERVER

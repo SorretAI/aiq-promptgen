@@ -137,8 +137,8 @@ class AIQueueCore:
         self.processing_queue = {}
         self.optimization_cache = {}
         self.interactive_sessions = {}
-        self.user_memory_file = "user_preferences.json"
-        self.prompt_library_file = "prompt_library.json"
+        self.user_memory_file = "../user_preferences.json"
+        self.prompt_library_file = "../prompt_library.json"
         self.user_memory = self._load_user_memory()
         self.prompt_library = self._load_prompt_library()
         self._ensure_models_available()

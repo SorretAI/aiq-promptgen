@@ -1,20 +1,24 @@
 // src/pages/Optimize.jsx
 import React, { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
 import QInterface from '../components/QInterface';
 import OptimizationWizard from '../components/OptimizationWizard';
 import ResultsDisplay from '../components/ResultsDisplay';
 import { optimizePrompt } from '../services/api';
 
+
 const Optimize = () => {
-  const [prompt, setPrompt] = useState('');
+  const location = useLocation();
+  const [prompt, setPrompt] = useState(location.state?.selectedPrompt || '');
   const [optimizationLevel, setOptimizationLevel] = useState('standard');
-  const [taskType, setTaskType] = useState('content_creation');
+  const [taskType, setTaskType] = useState(location.state?.taskType || 'content_creation');
   const [showWizard, setShowWizard] = useState(false);
   const [wizardSession, setWizardSession] = useState(null);
   const [result, setResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const pageRef = useRef(null);
+  
 
   useEffect(() => {
     // Page entrance animation

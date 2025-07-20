@@ -83,9 +83,9 @@ const OptimizationWizard = ({ session, originalPrompt, onComplete, onCancel }) =
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div ref={wizardRef} className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border border-white/20 max-w-2xl w-full max-h-[90vh] overflow-hidden">
+  <div ref={wizardRef} className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border border-white/20 w-full max-w-4xl h-[85vh] flex flex-col">
         {/* Header */}
-        <div className="p-6 border-b border-white/10">
+        <div className="p-6 border-b border-white/10 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-2xl font-bold text-white">Optimization Wizard</h2>
@@ -111,11 +111,11 @@ const OptimizationWizard = ({ session, originalPrompt, onComplete, onCancel }) =
         {/* Original Prompt Reference */}
         <div className="p-4 bg-white/5 border-b border-white/10">
           <p className="text-gray-300 text-sm">Original prompt:</p>
-          <p className="text-white text-sm mt-1 italic">"{originalPrompt}"</p>
+          <p className="text-white text-sm mt-1 italic">"{originalPrompt.slice(0, 100)}..."</p>
         </div>
 
         {/* Question Content */}
-        <div ref={questionRef} className="p-6 space-y-6">
+        <div ref={questionRef} className="p-6 space-y-6 overflow-y-auto flex-1">
           <div>
             <h3 className="text-xl font-semibold text-white mb-4">{currentQuestion.question}</h3>
             

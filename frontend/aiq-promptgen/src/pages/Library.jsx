@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { Search, Play, Edit, Trash2, Filter } from 'lucide-react';
 import { getPromptLibrary } from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 const Library = () => {
   const [prompts, setPrompts] = useState([]);
@@ -10,6 +11,7 @@ const Library = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
   const pageRef = useRef(null);
 
   useEffect(() => {
@@ -57,9 +59,14 @@ const Library = () => {
   };
 
   const handleOptimize = (prompt) => {
-    // Navigate to optimize page with this prompt
-    console.log('Optimize prompt:', prompt.id);
-  };
+  // Navigate to optimize page with the prompt data
+  navigate('/optimize', { 
+    state: { 
+      selectedPrompt: prompt.optimized_prompt,  // Use the optimized version
+      taskType: prompt.task_type 
+    }
+  });
+};
 
   const categories = [
     { value: 'all', label: 'All Categories' },

@@ -1,0 +1,18 @@
+/* Obsidian Neo Black Override */
+.app-container {
+  background: linear-gradient(135deg, #0a0a0a, #1a1a2e, #0f0f0f) !important;
+}
+
+/* Kill the purple madness */
+.bg-purple-900 { background-color: #0f0f0f !important; }
+.from-purple-900 { --tw-gradient-from: #0f0f0f !important; }
+.via-purple-900 { --tw-gradient-via: #1a1a2e !important; }
+.to-purple-900 { --tw-gradient-to: #0f0f0f !important; }
+
+/* Fix the bright purple backgrounds */
+.bg-white\/10 { background-color: rgba(20, 20, 30, 0.4) !important; }
+.bg-white\/5 { background-color: rgba(15, 15, 20, 0.3) !important; }
+
+/* Subtle borders */
+.border-white\/20 { border-color: rgba(100, 100, 120, 0.2) !important; }
+.border-white\/10 { border-color: rgba(80, 80, 100, 0.1) !important; }

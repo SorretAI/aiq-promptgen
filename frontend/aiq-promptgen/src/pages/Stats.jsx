@@ -122,7 +122,7 @@ const Stats = () => {
               </div>
               <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                 <span className="text-white">Response Time</span>
-                <span className="text-gray-300">< 2s</span>
+                <span className="text-gray-300">&lt; 2s</span>
               </div>
             </div>
           </div>

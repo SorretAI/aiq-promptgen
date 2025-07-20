@@ -704,19 +704,76 @@ async def get_user_memory():
 
 @app.get("/stats")
 async def get_system_stats():
+    """Get system performance and usage statistics"""
+    try:
+        # Try direct Ollama API call for more reliable data
+        import requests
+        ollama_response = requests.get('http://localhost:11434/api/tags', timeout=5)
+        
+        if ollama_response.status_code == 200:
+            ollama_data = ollama_response.json()
+            available_models = [model['name'] for model in ollama_data.get('models', [])]
+            ollama_error = None
+        else:
+            available_models = []
+            ollama_error = f"Ollama API returned status {ollama_response.status_code}"
+            
+    except requests.exceptions.ConnectionError:
+        available_models = []
+        ollama_error = "Cannot connect to Ollama (connection refused)"
+    except requests.exceptions.Timeout:
+        available_models = []
+        ollama_error = "Ollama API timeout"
+    except Exception as e:
+        available_models = []
+        ollama_error = f"Ollama API error: {str(e)}"
+        
+    # Get other stats safely
+    try:
+        active_sessions = len(core.interactive_sessions) if core else 0
+        prompt_library_size = len(core.prompt_library["prompts"]) if core and core.prompt_library else 0
+        user_memory_tasks = len(core.user_memory["task_preferences"]) if core and core.user_memory else 0
+    except Exception as e:
+        active_sessions = 0
+        prompt_library_size = 0
+        user_memory_tasks = 0
+        
+    return {
+        "available_models": available_models,
+        "active_sessions": active_sessions,
+        "prompt_library_size": prompt_library_size,
+        "user_memory_tasks": user_memory_tasks,
+        "system_status": "operational" if not ollama_error else "degraded",
+        "ollama_status": "connected" if not ollama_error else ollama_error
+    }
+    
+@app.get("/models")
+async def list_models():
+    """List available local models and their capabilities"""
     try:
         ollama_models = core.ollama_client.list()
+        models_info = []
+        
+        if 'models' in ollama_models:
+            for model in ollama_models['models']:
+                models_info.append({
+                    "name": model.get('name', 'unknown'),
+                    "size": model.get('size', 0),
+                    "modified": model.get('modified_at', ''),
+                    "family": model.get('details', {}).get('family', 'unknown'),
+                    "parameter_size": model.get('details', {}).get('parameter_size', 'unknown')
+                })
+        
         return {
-            "available_models": [model['name'] for model in ollama_models['models']],
-            "active_sessions": len(core.interactive_sessions),
-            "prompt_library_size": len(core.prompt_library["prompts"]),
-            "user_memory_tasks": len(core.user_memory["task_preferences"]),
-            "system_status": "operational"
+            "models": models_info,
+            "total_count": len(models_info),
+            "ollama_status": "connected"
         }
     except Exception as e:
         return {
             "error": str(e),
-            "system_status": "error"
+            "models": [],
+            "ollama_status": "disconnected"
         }
 
 # ============================================================================
